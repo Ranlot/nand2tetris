@@ -18,8 +18,7 @@ public class Main {
 
         try(Stream<String> streamOfInstructions = Files.lines(path)) {
             List<Integer> numberOfWords = streamOfInstructions.map(Main::countWords).collect(Collectors.toList());
-            System.out.println(numberOfWords);
-
+            numberOfWords.forEach(System.out::println);
         }
 
     }
