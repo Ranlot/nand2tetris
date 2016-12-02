@@ -1,8 +1,8 @@
-package PreDefinedTables;
+package PreDefinedConstants;
 
 import com.google.common.collect.ImmutableMap;
 
-public class PreDefinedTables {
+public final class PreDefinedTables {
 
     public static final ImmutableMap<String,String> JUMP_TABLE = ImmutableMap.<String, String>builder()
             .put("null", "000")
