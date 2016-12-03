@@ -1,5 +1,8 @@
 package HackAssembler;
 
+import static PreDefinedConstants.PreDefinedSymbols.A_INSTRUCTION;
+import static PreDefinedConstants.PreDefinedSymbols.LABEL_INDICATOR;
+
 public class Instruction {
 
     private String instruction;
@@ -8,16 +11,17 @@ public class Instruction {
         this.instruction = instruction;
     }
 
-    public boolean isOfTypeLabel() {
-        return true;
+    private boolean instructionIsOfTypeLabel(String instruction) {
+        return instruction.contains("(") && instruction.contains(")");
     }
 
-    public boolean isOfTypeA() {
-        return true;
-    }
-
-    public boolean isOfTypeC() {
-        return true;
+    public String getInstructionType() {
+        if(instructionIsOfTypeLabel(instruction)) {
+            return LABEL_INDICATOR;
+        }
+        else {
+            return A_INSTRUCTION;
+        }
     }
 
     @Override
