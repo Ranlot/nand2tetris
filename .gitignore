@@ -4,3 +4,5 @@
 *.bat
 *.properties
 gradlew
+.gradle/
+build/
