@@ -34,8 +34,7 @@ public class Main {
     private static String make16bitBinary(int value) {
         String binaryValue = Integer.toBinaryString(value);
         int missingBits = WORD_LENGTH - binaryValue.length();
-        String repeat0 = StringUtils.repeat('0', missingBits);
-        return repeat0 + binaryValue;
+        return StringUtils.repeat('0', missingBits) + binaryValue;
     }
 
     public static void main(String[] args) throws IOException {
