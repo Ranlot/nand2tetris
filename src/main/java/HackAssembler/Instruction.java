@@ -15,6 +15,10 @@ public class Instruction {
         return instruction.contains("(") && instruction.contains(")");
     }
 
+    public String stripLabelInstruction() {
+        return instruction.split("@")[0];
+    }
+
     public String getInstructionType() {
         if(instructionIsOfTypeLabel(instruction)) {
             return LABEL_INDICATOR;
