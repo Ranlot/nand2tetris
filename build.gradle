@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'com.google.guava', name: 'guava', version: '20.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+    compile group: 'org.jooq', name: 'jool', version: '0.9.12'
+    compile group: 'com.google.guava', name: 'guava', version: '20.0'
 }

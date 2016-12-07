@@ -1,8 +1,8 @@
 package HackAssembler;
 
-import static PreDefinedConstants.PreDefinedSymbols.A_INSTRUCTION;
-import static PreDefinedConstants.PreDefinedSymbols.LABEL_INDICATOR;
+import static PreDefinedConstants.PreDefinedSymbols.shtrudelSymbol;
 
+//TODO: big mess to organize better: multiple dispatch???
 public class Instruction {
 
     private String instruction;
@@ -15,22 +15,26 @@ public class Instruction {
         return instruction.contains("(") && instruction.contains(")");
     }
 
-    public String stripLabelInstruction() {
-        return instruction.split("@")[0];
+    public boolean isLabelInstruction() {
+        return instruction.contains("(") && instruction.contains(")");
     }
 
-    public String getInstructionType() {
-        if(instructionIsOfTypeLabel(instruction)) {
-            return LABEL_INDICATOR;
-        }
-        else {
-            return A_INSTRUCTION;
-        }
+    //!!! valid only for label instrucion
+    public String getLabelAsString() {
+        return instruction.replace("(", "").replace(")", "");
+    }
+
+    private static boolean isAinstruction(String instruction) {
+        return instruction.startsWith("@");
+    }
+
+    public String stripLabelInstruction() {
+        return instruction.split(shtrudelSymbol)[0];
     }
 
     @Override
     public String toString() {
-        return "Instruction = " + instruction;
+        return instruction;
     }
 
 }
