@@ -14,4 +14,8 @@ public final class PreDefinedSymbols {
 
     public final static String shtrudelSymbol = "@";
 
+    public final static String Ainstruction = "A-instruction";
+
+    public final static String Cinstruction = "C-instruction";
+
 }
