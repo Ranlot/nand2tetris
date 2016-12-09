@@ -24,7 +24,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Path path = Paths.get("src/main/resources/Max.asm");
+        Path path = Paths.get("src/main/resources/Rect.asm");
 
         Map<SymbolTableNames, Map<String, String>> allSymbolMaps = getPreDefinedMaps();
 
@@ -56,7 +56,7 @@ public class Main {
                     .map(ASMtextCPU::parseCPUinstructionType)
                     .map(cpuInstructionFactory::makeCPUinstruction);
 
-            Seq<String> res = cpuInstructions.map(x -> x.decodeInstruction(allSymbolMaps));
+            Seq<String> res = cpuInstructions.map(cpuInstruction -> cpuInstruction.decodeInstruction(allSymbolMaps));
             res.forEach(System.out::println);
 
         }
