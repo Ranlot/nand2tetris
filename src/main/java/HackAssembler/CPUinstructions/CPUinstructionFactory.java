@@ -2,13 +2,13 @@ package HackAssembler.CPUinstructions;
 
 import org.jooq.lambda.tuple.Tuple2;
 
-import static PreDefinedConstants.PreDefinedSymbols.Ainstruction;
+import static PreDefinedConstants.PreDefinedSymbols.addressInstruction;
 
 public class CPUinstructionFactory {
 
-    public Instruction getCPUinstruction(Tuple2<String, String> instructionTuple) {
+    public CPUinstruction makeCPUinstruction(Tuple2<String, String> instructionTuple) {
 
-        return instructionTuple.v1.equals(Ainstruction) ? new Ainstruction(instructionTuple.v2) : new Cinstruction(instructionTuple.v2);
+        return instructionTuple.v1.equals(addressInstruction) ? new AddressInstruction(instructionTuple.v2) : new ComputeInstruction(instructionTuple.v2);
 
     }
 
