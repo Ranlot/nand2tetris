@@ -12,17 +12,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
-import static HackAssembler.Utils.Utils.createLabelTable;
+import static HackAssembler.Utils.Utils.createRelevantTables;
 import static PreDefinedConstants.PreDefinedTables.getPreDefinedMaps;
 import static PreDefinedConstants.SymbolTableNames.labelTable;
 import static org.jooq.lambda.Seq.seq;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
 
         Path path = Paths.get("src/main/resources/Rect.asm");
 
@@ -38,10 +40,12 @@ public class Main {
                     .filter(ASMtext::isNotEmpty)
                     .duplicate();
 
-            Seq<ASMtext> allInstructions = duplicatedASMtext.v1;
+            //go over the assembly code and create tables of symbols for labels and memory locations
+            List<Map<String, String>> relevantTables = createRelevantTables(duplicatedASMtext.v1);
 
-            //note that createLabelTable closes the input stream
-            Map<String, String> labelTableContent = createLabelTable(allInstructions);
+            //TODO: get rid of explicit indices
+            Map<String, String> labelTableContent = relevantTables.get(0);
+            Map<String, String> memorySymbolsContent = relevantTables.get(1);
             allSymbolMaps.put(labelTable, labelTableContent);
 
             for (String label : labelTableContent.keySet()) {
