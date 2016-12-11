@@ -8,13 +8,11 @@ import PreDefinedConstants.SymbolTableNames;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 import static HackAssembler.Utils.Utils.createRelevantTables;
@@ -24,7 +22,7 @@ import static org.jooq.lambda.Seq.seq;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
+    public static void main(String[] args) throws Exception {
 
         Path path = Paths.get("src/main/resources/Rect.asm");
 
@@ -48,8 +46,12 @@ public class Main {
             Map<String, String> memorySymbolsContent = relevantTables.get(1);
             allSymbolMaps.put(labelTable, labelTableContent);
 
-            for (String label : labelTableContent.keySet()) {
+            for(String label : labelTableContent.keySet()) {
                 System.out.printf("%s\t%s\n", label, labelTableContent.get(label));
+            }
+
+            for(String memorySymbol : memorySymbolsContent.keySet()) {
+                System.out.printf("%s\t%s\n", memorySymbol, memorySymbolsContent.get(memorySymbol));
             }
 
             CPUinstructionFactory cpuInstructionFactory = new CPUinstructionFactory();

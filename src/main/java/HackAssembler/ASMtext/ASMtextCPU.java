@@ -7,6 +7,7 @@ import static PreDefinedConstants.PreDefinedSymbols.addressInstruction;
 import static PreDefinedConstants.PreDefinedSymbols.computeInstruction;
 import static PreDefinedConstants.PreDefinedSymbols.shtrudelSymbol;
 
+//TODO: maybe should inherit from ASMtext????
 public class ASMtextCPU {
 
     private String cpuInstruction;

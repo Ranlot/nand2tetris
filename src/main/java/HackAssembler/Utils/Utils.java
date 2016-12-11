@@ -23,15 +23,23 @@ public class Utils {
         return StringUtils.repeat(zeroBit, missingBits) + binaryValue;
     }
 
-    public static List<Map<String, String>> createRelevantTables(Seq<ASMtext> allInstructions) throws ExecutionException, InterruptedException {
+    public static List<Map<String, String>> createRelevantTables(Seq<ASMtext> allInstructions) throws Exception {
 
         List<Map<String, String>> listOfTables = new ArrayList<>();
 
         Tuple2<Seq<ASMtext>, Seq<ASMtext>> duplicatedAllInstructions = allInstructions.duplicate();
 
         ExecutorService executor = Executors.newFixedThreadPool(2);
+
         Callable<Map<String, String>> labelTableTask = new LabelTableGenerator(duplicatedAllInstructions.v1);
-        Callable<Map<String, String>> memorySymbolsTask = new MemoryLocationSymbolsGenerator(duplicatedAllInstructions.v2);
+
+        //keep only address instructions
+        Seq<ASMtext> addressInstructions = duplicatedAllInstructions.v2.filter(ASMtext::isAddressInstruction);
+
+        //Map<String, String> labelTableContent = labelTableTask.call();
+
+        Callable<Map<String, String>> memorySymbolsTask = new MemoryLocationSymbolsGenerator(addressInstructions);
+        //Map<String, String> memorySymbolsContent = memorySymbolsTask.call();
 
         Future<Map<String, String>> labelTableContentFuture = executor.submit(labelTableTask);
         Future<Map<String, String>> memorySymbolsContentFuture = executor.submit(memorySymbolsTask);

@@ -12,6 +12,15 @@ public class ASMtext {
 
     private boolean isLabelInstruction(String string) { return string.contains("(") && string.contains(")"); }
 
+    public boolean isAddressInstruction() {
+        return string.startsWith(shtrudelSymbol);
+    }
+
+    //TODO: should not be here
+    public String extractMemorySymbol() {
+        return string.split(shtrudelSymbol)[1];
+    }
+
     public ASMtext sanitizeString() {
         String symbolLessString = string.split(commentSymbol)[0];
         String sanitizedString = symbolLessString.replaceAll(emptySpace, byNothing);

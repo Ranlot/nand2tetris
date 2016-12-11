@@ -31,6 +31,12 @@ abstract public class PreDefinedTables {
             .put("AMD", "111")
             .build();
 
+    public static Map<String, String> originalMemorySymbolContent = new HashMap<String, String>() {{
+            put("SP", "0");
+            put("LCL", "1");
+            put("ARG", "2");
+    }};
+
     public static Map<SymbolTableNames, Map<String, String>> getPreDefinedMaps() {
         Map<SymbolTableNames, Map<String, String>> mapOfPreDefinedMaps = new HashMap<>();
         mapOfPreDefinedMaps.put(jumpTable, jumpTableContent);

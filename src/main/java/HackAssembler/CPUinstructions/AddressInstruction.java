@@ -15,7 +15,7 @@ public class AddressInstruction implements CPUinstruction {
         this.instruction = instruction;
     }
 
-    private String extractSymbol(String instruction) {
+    private String extractMemorySymbol(String instruction) {
         return instruction.split(shtrudelSymbol)[1];
     }
 
