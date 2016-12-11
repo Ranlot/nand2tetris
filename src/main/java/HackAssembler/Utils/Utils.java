@@ -29,24 +29,23 @@ public class Utils {
 
         Tuple2<Seq<ASMtext>, Seq<ASMtext>> duplicatedAllInstructions = allInstructions.duplicate();
 
-        ExecutorService executor = Executors.newFixedThreadPool(2);
+        //ExecutorService executor = Executors.newFixedThreadPool(2);
 
         Callable<Map<String, String>> labelTableTask = new LabelTableGenerator(duplicatedAllInstructions.v1);
 
         //keep only address instructions
         Seq<ASMtext> addressInstructions = duplicatedAllInstructions.v2.filter(ASMtext::isAddressInstruction);
 
-        //Map<String, String> labelTableContent = labelTableTask.call();
+        Map<String, String> labelTableContent = labelTableTask.call();
 
         Callable<Map<String, String>> memorySymbolsTask = new MemoryLocationSymbolsGenerator(addressInstructions);
-        //Map<String, String> memorySymbolsContent = memorySymbolsTask.call();
+        Map<String, String> memorySymbolsContent = memorySymbolsTask.call();
 
-        Future<Map<String, String>> labelTableContentFuture = executor.submit(labelTableTask);
-        Future<Map<String, String>> memorySymbolsContentFuture = executor.submit(memorySymbolsTask);
-        executor.shutdown();
-
-        Map<String, String> labelTableContent = labelTableContentFuture.get();
-        Map<String, String> memorySymbolsContent = memorySymbolsContentFuture.get();
+        //Future<Map<String, String>> labelTableContentFuture = executor.submit(labelTableTask);
+        //Future<Map<String, String>> memorySymbolsContentFuture = executor.submit(memorySymbolsTask);
+        //executor.shutdown();
+        //Map<String, String> labelTableContent = labelTableContentFuture.get();
+        //Map<String, String> memorySymbolsContent = memorySymbolsContentFuture.get();
 
         listOfTables.add(labelTableContent);
         listOfTables.add(memorySymbolsContent);
