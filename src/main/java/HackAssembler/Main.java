@@ -63,7 +63,7 @@ public class Main {
                     .map(cpuInstructionFactory::makeCPUinstruction);
 
             Seq<String> res = cpuInstructions.map(cpuInstruction -> cpuInstruction.decodeInstruction(allSymbolMaps));
-            res.forEach(System.out::println);
+            //res.forEach(System.out::println);
 
         }
 

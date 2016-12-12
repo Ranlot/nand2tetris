@@ -10,5 +10,6 @@ public final class PreDefinedSymbols {
     public final static String shtrudelSymbol = "@";
     public final static String addressInstruction = "addressInstruction";
     public final static String computeInstruction = "computeInstruction";
+    public final static long startOfFreeMemoryAddressSymbols = 16;
 
 }

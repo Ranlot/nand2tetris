@@ -1,19 +1,19 @@
 package HackAssembler.Utils;
 
 import HackAssembler.ASMtext.ASMtext;
-import HackAssembler.TableGenerators.LabelTableGenerator;
-import HackAssembler.TableGenerators.MemoryLocationSymbolsGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.lambda.Seq;
+import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import static PreDefinedConstants.PreDefinedSymbols.wordLength;
-import static PreDefinedConstants.PreDefinedSymbols.zeroBit;
+import static PreDefinedConstants.PreDefinedSymbols.*;
+import static PreDefinedConstants.PreDefinedTables.originalMemorySymbolContent;
 
 public class Utils {
 
@@ -23,29 +23,38 @@ public class Utils {
         return StringUtils.repeat(zeroBit, missingBits) + binaryValue;
     }
 
-    public static List<Map<String, String>> createRelevantTables(Seq<ASMtext> allInstructions) throws Exception {
+    public static List<Map<String, String>> createRelevantTables(Seq<ASMtext> allInstructions) {
 
         List<Map<String, String>> listOfTables = new ArrayList<>();
 
         Tuple2<Seq<ASMtext>, Seq<ASMtext>> duplicatedAllInstructions = allInstructions.duplicate();
 
-        //ExecutorService executor = Executors.newFixedThreadPool(2);
-
-        Callable<Map<String, String>> labelTableTask = new LabelTableGenerator(duplicatedAllInstructions.v1);
+        Map<String, String> labelTableContent = duplicatedAllInstructions.v1
+                .zipWithIndex()
+                .filter(numberedInstruction -> numberedInstruction.v1.isLabelInstruction())
+                .zipWithIndex()
+                .collect(Collectors.toMap(x -> x.v1.v1.toString(), x -> make16bitBinary(x.v1.v2 - x.v2)));
 
         //keep only address instructions
         Seq<ASMtext> addressInstructions = duplicatedAllInstructions.v2.filter(ASMtext::isAddressInstruction);
 
-        Map<String, String> labelTableContent = labelTableTask.call();
+        Set<String> preDefinedMemorySymbols = originalMemorySymbolContent.keySet();
 
-        Callable<Map<String, String>> memorySymbolsTask = new MemoryLocationSymbolsGenerator(addressInstructions);
-        Map<String, String> memorySymbolsContent = memorySymbolsTask.call();
+        Set<String> labelSymbols = labelTableContent.keySet().stream()
+                .map(x -> x.replace("(", "").replace(")", ""))
+                .collect(Collectors.toSet());
 
-        //Future<Map<String, String>> labelTableContentFuture = executor.submit(labelTableTask);
-        //Future<Map<String, String>> memorySymbolsContentFuture = executor.submit(memorySymbolsTask);
-        //executor.shutdown();
-        //Map<String, String> labelTableContent = labelTableContentFuture.get();
-        //Map<String, String> memorySymbolsContent = memorySymbolsContentFuture.get();
+        Map<String, String> memorySymbolsContent = addressInstructions
+                .map(ASMtext::extractMemorySymbol)
+                .distinct()
+                .filter(memorySymbol -> !labelSymbols.contains(memorySymbol))
+                .filter(memorySymbol -> !preDefinedMemorySymbols.contains(memorySymbol))
+                .filter(memorySymbol -> !StringUtils.isNumeric(memorySymbol))
+                .zipWithIndex()
+                .map(numberedMemorySymbol -> Tuple.tuple(numberedMemorySymbol.v1,
+                        make16bitBinary(numberedMemorySymbol.v2 + startOfFreeMemoryAddressSymbols)))
+                .collect(Collectors.toMap(numberedMemorySymbol -> numberedMemorySymbol.v1,
+                        numberedMemorySymbol -> numberedMemorySymbol.v2));
 
         listOfTables.add(labelTableContent);
         listOfTables.add(memorySymbolsContent);
