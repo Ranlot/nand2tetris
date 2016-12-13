@@ -4,5 +4,6 @@ public enum SymbolTableNames {
     labelTable,
     jumpTable,
     destinationTable,
-    memorySymbolTable
+    memorySymbolTable,
+    computeTable
 }

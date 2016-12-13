@@ -15,7 +15,7 @@ public class ComputeInstruction implements CPUinstruction {
     }
 
     @Override
-    public String decodeInstruction(Map<SymbolTableNames, Map<String, String>> allSymbolMaps) {
+    public String decodeInstruction() {
         return computeInstruction + "->" + instruction + ".";
     }
 

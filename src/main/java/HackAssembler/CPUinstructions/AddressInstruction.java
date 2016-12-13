@@ -20,7 +20,7 @@ public class AddressInstruction implements CPUinstruction {
     }
 
     @Override
-    public String decodeInstruction(Map<SymbolTableNames, Map<String, String>> allSymbolMaps) {
+    public String decodeInstruction() {
         return addressInstruction + "->" + instruction + ".";
     }
 

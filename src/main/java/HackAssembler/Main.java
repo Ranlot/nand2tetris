@@ -4,7 +4,6 @@ import HackAssembler.ASMtext.ASMtext;
 import HackAssembler.ASMtext.ASMtextCPU;
 import HackAssembler.CPUinstructions.CPUinstruction;
 import HackAssembler.CPUinstructions.CPUinstructionFactory;
-import PreDefinedConstants.SymbolTableNames;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
 
@@ -16,8 +15,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static HackAssembler.Utils.Utils.createRelevantTables;
-import static PreDefinedConstants.PreDefinedTables.getPreDefinedMaps;
-import static PreDefinedConstants.SymbolTableNames.labelTable;
 import static org.jooq.lambda.Seq.seq;
 
 public class Main {
@@ -25,8 +22,6 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         Path path = Paths.get("src/main/resources/Rect.asm");
-
-        Map<SymbolTableNames, Map<String, String>> allSymbolMaps = getPreDefinedMaps();
 
         try (Stream<String> streamOfLines = Files.lines(path)) {
 
@@ -44,7 +39,6 @@ public class Main {
             //TODO: get rid of explicit indices
             Map<String, String> labelTableContent = relevantTables.get(0);
             Map<String, String> memorySymbolsContent = relevantTables.get(1);
-            allSymbolMaps.put(labelTable, labelTableContent);
 
             for(String label : labelTableContent.keySet()) {
                 System.out.printf("%s\t%s\n", label, labelTableContent.get(label));
@@ -62,7 +56,7 @@ public class Main {
                     .map(ASMtextCPU::parseCPUinstructionType)
                     .map(cpuInstructionFactory::makeCPUinstruction);
 
-            Seq<String> res = cpuInstructions.map(cpuInstruction -> cpuInstruction.decodeInstruction(allSymbolMaps));
+            Seq<String> res = cpuInstructions.map(CPUinstruction::decodeInstruction);
             //res.forEach(System.out::println);
 
         }
