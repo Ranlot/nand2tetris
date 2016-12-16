@@ -12,6 +12,10 @@ public class ASMtext {
 
     private boolean isLabelInstruction(String string) { return string.contains("(") && string.contains(")"); }
 
+    public String removeParenthesis() {
+        return string.replace("(", "").replace(")", "");
+    }
+
     public boolean isAddressInstruction() {
         return string.startsWith(shtrudelSymbol);
     }

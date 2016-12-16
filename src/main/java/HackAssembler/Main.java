@@ -7,6 +7,7 @@ import HackAssembler.CPUinstructions.CPUinstructionFactory;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
 
+import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,13 +16,15 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static HackAssembler.Utils.Utils.createRelevantTables;
+import static HackAssembler.Utils.Utils.writeToFile;
+import static PreDefinedConstants.PreDefinedTables.*;
 import static org.jooq.lambda.Seq.seq;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        Path path = Paths.get("src/main/resources/Rect.asm");
+        Path path = Paths.get("src/main/resources/Pong.asm");
 
         try (Stream<String> streamOfLines = Files.lines(path)) {
 
@@ -38,15 +41,14 @@ public class Main {
 
             //TODO: get rid of explicit indices
             Map<String, String> labelTableContent = relevantTables.get(0);
-            Map<String, String> memorySymbolsContent = relevantTables.get(1);
+            Map<String, String> programSpecificSymbols = relevantTables.get(1);
+            memorySymbolContent.putAll(programSpecificSymbols);
 
-            for(String label : labelTableContent.keySet()) {
-                System.out.printf("%s\t%s\n", label, labelTableContent.get(label));
-            }
-
-            for(String memorySymbol : memorySymbolsContent.keySet()) {
-                System.out.printf("%s\t%s\n", memorySymbol, memorySymbolsContent.get(memorySymbol));
-            }
+            final RelevantTables finalRelevantTables = new RelevantTables(labelTableContent,
+                    memorySymbolContent,
+                    computeTableContent,
+                    jumpTableContent,
+                    destinationTableContent);
 
             CPUinstructionFactory cpuInstructionFactory = new CPUinstructionFactory();
 
@@ -56,8 +58,11 @@ public class Main {
                     .map(ASMtextCPU::parseCPUinstructionType)
                     .map(cpuInstructionFactory::makeCPUinstruction);
 
-            Seq<String> res = cpuInstructions.map(CPUinstruction::decodeInstruction);
-            //res.forEach(System.out::println);
+            Stream<String> res = cpuInstructions.map(cpuInstruction -> cpuInstruction.decodeInstruction(finalRelevantTables));
+
+            final FileWriter fw = new FileWriter("src/main/resources/Pong.hack");
+            res.forEach(x -> writeToFile(fw, x));
+            fw.close();
 
         }
 

@@ -11,5 +11,9 @@ public final class PreDefinedSymbols {
     public final static String addressInstruction = "addressInstruction";
     public final static String computeInstruction = "computeInstruction";
     public final static long startOfFreeMemoryAddressSymbols = 16;
+    public final static String jumpSeparator = ";";
+    public final static String equalSeparator = "=";
+    public final static String doNotSave = "null";
+    public final static String computeInstructionMSBs = "111";
 
 }

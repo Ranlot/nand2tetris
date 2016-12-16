@@ -1,7 +1,9 @@
 package HackAssembler.CPUinstructions;
 
+import HackAssembler.RelevantTables;
+
 public interface CPUinstruction {
 
-    String decodeInstruction();
+    String decodeInstruction(RelevantTables relevantTables);
 
 }

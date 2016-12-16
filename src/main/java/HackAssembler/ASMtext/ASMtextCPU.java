@@ -16,6 +16,8 @@ public class ASMtextCPU {
         return cpuInstruction.startsWith(shtrudelSymbol);
     }
 
+
+
     ASMtextCPU(String cpuInstruction) {
         this.cpuInstruction = cpuInstruction;
     }

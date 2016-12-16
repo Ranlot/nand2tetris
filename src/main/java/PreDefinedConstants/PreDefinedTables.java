@@ -10,7 +10,8 @@ abstract public class PreDefinedTables {
     public static final ImmutableMap<String,String> jumpTableContent = ImmutableMap.<String, String>builder()
             .put("null", "000")
             .put("JGT", "001")
-            .put("JGE", "010")
+            .put("JEQ", "010")
+            .put("JGE", "011")
             .put("JLT", "100")
             .put("JNE", "101")
             .put("JLE", "110")
@@ -28,7 +29,7 @@ abstract public class PreDefinedTables {
             .put("AMD", "111")
             .build();
 
-    public static Map<String, String> originalMemorySymbolContent = new HashMap<String, String>() {{
+    public static Map<String, String> memorySymbolContent = new HashMap<String, String>() {{
             put("SP", "0");
             put("LCL", "1");
             put("ARG", "2");
