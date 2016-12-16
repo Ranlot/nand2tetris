@@ -24,13 +24,15 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        Path path = Paths.get("src/main/resources/Pong.asm");
+        long timeIN = System.nanoTime();
+
+        Path path = Paths.get("6.Assembler/src/main/resources/Pong.asm");
 
         try (Stream<String> streamOfLines = Files.lines(path)) {
 
             Seq<String> sequentialStreamOfLines = seq(streamOfLines);
 
-            Tuple2<Seq<ASMtext>, Seq<ASMtext>> duplicatedASMtext = sequentialStreamOfLines
+            final Tuple2<Seq<ASMtext>, Seq<ASMtext>> duplicatedASMtext = sequentialStreamOfLines
                     .map(ASMtext::new)
                     .map(ASMtext::sanitizeString)
                     .filter(ASMtext::isNotEmpty)
@@ -44,7 +46,7 @@ public class Main {
             Map<String, String> programSpecificSymbols = relevantTables.get(1);
             memorySymbolContent.putAll(programSpecificSymbols);
 
-            final RelevantTables finalRelevantTables = new RelevantTables(labelTableContent,
+            RelevantTables finalRelevantTables = new RelevantTables(labelTableContent,
                     memorySymbolContent,
                     computeTableContent,
                     jumpTableContent,
@@ -58,11 +60,16 @@ public class Main {
                     .map(ASMtextCPU::parseCPUinstructionType)
                     .map(cpuInstructionFactory::makeCPUinstruction);
 
-            Stream<String> res = cpuInstructions.map(cpuInstruction -> cpuInstruction.decodeInstruction(finalRelevantTables));
+            FileWriter fileOut = new FileWriter("6.Assembler/src/main/resources/Pong.hack");
 
-            final FileWriter fw = new FileWriter("src/main/resources/Pong.hack");
-            res.forEach(x -> writeToFile(fw, x));
-            fw.close();
+            cpuInstructions
+                    .map(cpuInstruction -> cpuInstruction.decodeInstruction(finalRelevantTables))
+                    .forEach(binaryInstruction -> writeToFile(fileOut, binaryInstruction));
+
+            fileOut.close();
+
+            long timeOUT = System.nanoTime();
+            System.out.printf("\nDone in %f seconds\n", (timeOUT - timeIN) / Math.pow(10, 9));
 
         }
 
