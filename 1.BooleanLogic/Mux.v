@@ -1,3 +1,9 @@
+/** 
+ * Multiplexor:
+ * out = a if sel == 0
+ *       b otherwise
+ */
+
 CHIP Mux {
     IN a, b, sel;
     OUT out;

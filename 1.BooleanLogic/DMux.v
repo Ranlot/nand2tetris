@@ -1,3 +1,9 @@
+/**
+ * Demultiplexor:
+ * {a,b} = {in,0} if sel==0
+ *         {0,in} if sel==1
+ */
+
 CHIP DMux {
     IN in, sel;
     OUT a, b;
