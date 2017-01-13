@@ -1,8 +1,8 @@
 *.iml
 *.xml
-*.jar
 *.bat
 *.properties
 gradlew
 .gradle/
 build/
+gradle/
