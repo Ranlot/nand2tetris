@@ -1,0 +1,1 @@
+java -jar ../6.Assembler/6.Assembler-1.0-SNAPSHOT.jar Multiplicator/Mult.asm
