@@ -14,3 +14,12 @@ dependencies {
     compile group: 'org.jooq', name: 'jool', version: '0.9.12'
     compile group: 'com.google.guava', name: 'guava', version: '20.0'
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class' : 'HackAssembler.Main'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

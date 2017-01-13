@@ -26,7 +26,14 @@ public class Main {
 
         long timeIN = System.nanoTime();
 
-        Path path = Paths.get("6.Assembler/src/main/resources/Pong.asm");
+        String filePath = args[0];
+
+        Path path = Paths.get(filePath);
+
+        String rootDir = path.getParent().toString();
+        String ASMfileName = path.getFileName().toString().split("\\.")[0];
+        String HackFileOut = ASMfileName + ".hack";
+        String hackOUT = rootDir + "/" + HackFileOut;
 
         try (Stream<String> streamOfLines = Files.lines(path)) {
 
@@ -60,7 +67,7 @@ public class Main {
                     .map(ASMtextCPU::parseCPUinstructionType)
                     .map(cpuInstructionFactory::makeCPUinstruction);
 
-            FileWriter fileOut = new FileWriter("6.Assembler/src/main/resources/Pong.hack");
+            FileWriter fileOut = new FileWriter(hackOUT);
 
             cpuInstructions
                     .map(cpuInstruction -> cpuInstruction.decodeInstruction(finalRelevantTables))
@@ -69,7 +76,7 @@ public class Main {
             fileOut.close();
 
             long timeOUT = System.nanoTime();
-            System.out.printf("\nDone in %f seconds\n", (timeOUT - timeIN) / Math.pow(10, 9));
+            System.out.printf("\nCreated %s in %f seconds\n\n", HackFileOut, (timeOUT - timeIN) / Math.pow(10, 9));
 
         }
 
