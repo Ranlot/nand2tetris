@@ -1,26 +1,21 @@
 package HackAssembler.CPUinstructions;
 
-import HackAssembler.RelevantTables;
+import HackAssembler.Utils.ASMline;
+import HackAssembler.Utils.RelevantTables;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-import static HackAssembler.Utils.Utils.extractMemorySymbol;
-import static PreDefinedConstants.PreDefinedSymbols.shtrudelSymbol;
-import static PreDefinedConstants.PreDefinedSymbols.wordLength;
-import static PreDefinedConstants.PreDefinedSymbols.zeroBit;
+import static HackAssembler.PreDefinedConstants.PreDefinedSymbols.wordLength;
+import static HackAssembler.PreDefinedConstants.PreDefinedSymbols.zeroBit;
 
 public class AddressInstruction implements CPUinstruction {
 
-    private String instruction;
+    private ASMline instruction;
 
-    public AddressInstruction(String instruction) {
+    public AddressInstruction(ASMline instruction) {
         this.instruction = instruction;
     }
-
-    /*private String extractMemorySymbol(String instruction) {
-        return instruction.split(shtrudelSymbol)[1];
-    }*/
 
     private static String make16bitBinary(String string) {
         int intValue = Integer.valueOf(string);
@@ -32,7 +27,7 @@ public class AddressInstruction implements CPUinstruction {
     @Override
     public String decodeCPUInstruction(RelevantTables relevantTables) {
 
-        String addressValue = extractMemorySymbol(instruction);
+        String addressValue = instruction.extractMemorySymbol();
 
         Map<String, String> labelTable = relevantTables.getLabelTable();
         Map<String, String> memorySymbolTable = relevantTables.getMemorySymbol();

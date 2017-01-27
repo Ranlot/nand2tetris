@@ -1,7 +1,6 @@
 package HackAssembler.Utils;
 
-import HackAssembler.ASMtext.ASMtext;
-import PreDefinedConstants.DynamicalTables;
+import HackAssembler.PreDefinedConstants.DynamicalTables;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple;
@@ -9,14 +8,15 @@ import org.jooq.lambda.tuple.Tuple2;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static PreDefinedConstants.PreDefinedSymbols.shtrudelSymbol;
-import static PreDefinedConstants.PreDefinedSymbols.startOfFreeMemoryAddressSymbols;
-import static PreDefinedConstants.PreDefinedTables.memorySymbolsMap;
+import static HackAssembler.PreDefinedConstants.PreDefinedSymbols.startOfFreeMemoryAddressSymbols;
+import static HackAssembler.PreDefinedConstants.PreDefinedTables.memorySymbolsMap;
 
-public class Utils {
+public class GeneralFunctions {
 
     public static void writeToFile(FileWriter fw, String string) {
         try {
@@ -26,14 +26,10 @@ public class Utils {
         }
     }
 
-    public static String extractMemorySymbol(String string) {
-        return string.split(shtrudelSymbol)[1];
-    }
-
-    public static Map<DynamicalTables, Map<String, String>> createRelevantTables(Seq<ASMtext> allInstructions) {
+    public static Map<DynamicalTables, Map<String, String>> createRelevantTables(Seq<ASMline> allInstructions) {
         Map<DynamicalTables, Map<String, String>> relevantTables = new HashMap<>();
 
-        Tuple2<Seq<ASMtext>, Seq<ASMtext>> duplicatedAllInstructions = allInstructions.duplicate();
+        Tuple2<Seq<ASMline>, Seq<ASMline>> duplicatedAllInstructions = allInstructions.duplicate();
 
         Map<String, String> labelTableContent = duplicatedAllInstructions.v1
                 .zipWithIndex()
@@ -46,10 +42,10 @@ public class Utils {
         Set<String> preDefinedMemorySymbols = memorySymbolsMap.keySet();
 
         //keep only address instructions
-        Seq<ASMtext> addressInstructions = duplicatedAllInstructions.v2.filter(ASMtext::isAddressInstruction);
+        Seq<ASMline> addressInstructions = duplicatedAllInstructions.v2.filter(ASMline::isAddressInstruction);
 
         Map<String, String> memorySymbolsContent = addressInstructions
-                .map(ASMtext::extractMemorySymbol)
+                .map(ASMline::extractMemorySymbol)
                 .distinct()
                 .filter(memorySymbol -> !labelSymbols.contains(memorySymbol))
                 .filter(memorySymbol -> !preDefinedMemorySymbols.contains(memorySymbol))
@@ -65,4 +61,5 @@ public class Utils {
 
         return relevantTables;
     }
+
 }

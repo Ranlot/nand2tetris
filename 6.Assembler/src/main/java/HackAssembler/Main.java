@@ -1,9 +1,9 @@
 package HackAssembler;
 
-import HackAssembler.ASMtext.ASMtext;
-import HackAssembler.ASMtext.ASMtextCPU;
+import HackAssembler.Utils.ASMline;
 import HackAssembler.CPUinstructions.CPUinstruction;
-import PreDefinedConstants.DynamicalTables;
+import HackAssembler.Utils.RelevantTables;
+import HackAssembler.PreDefinedConstants.DynamicalTables;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
 
@@ -14,10 +14,10 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static HackAssembler.Utils.Utils.createRelevantTables;
-import static HackAssembler.Utils.Utils.writeToFile;
-import static PreDefinedConstants.PreDefinedTables.*;
-import static PreDefinedConstants.DynamicalTables.*;
+import static HackAssembler.Utils.GeneralFunctions.createRelevantTables;
+import static HackAssembler.Utils.GeneralFunctions.writeToFile;
+import static HackAssembler.PreDefinedConstants.DynamicalTables.labelSymbols;
+import static HackAssembler.PreDefinedConstants.PreDefinedTables.*;
 import static org.jooq.lambda.Seq.seq;
 
 public class Main {
@@ -39,10 +39,10 @@ public class Main {
 
             Seq<String> sequentialStreamOfLines = seq(streamOfLines);
 
-            final Tuple2<Seq<ASMtext>, Seq<ASMtext>> duplicatedASMtext = sequentialStreamOfLines
-                    .map(ASMtext::new)
-                    .map(ASMtext::sanitizeString)
-                    .filter(ASMtext::isNotEmpty)
+            final Tuple2<Seq<ASMline>, Seq<ASMline>> duplicatedASMtext = sequentialStreamOfLines
+                    .map(ASMline::new)
+                    .map(ASMline::sanitizeString)
+                    .filter(ASMline::isNotEmpty)
                     .duplicate();
 
             // consume first copy of assembly code
@@ -55,9 +55,8 @@ public class Main {
 
             //consume second copy of assembly code to handle CPU instructions (address & compute)
             Seq<CPUinstruction> cpuInstructions = duplicatedASMtext.v2
-                    .filter(ASMtext::isCPUinstruction)
-                    .map(ASMtext::issueCPUinstruction)
-                    .map(ASMtextCPU::makeCPUinstruction);
+                    .filter(ASMline::isCPUinstruction)
+                    .map(ASMline::makeCPUinstruction);
 
             FileWriter fileOut = new FileWriter(hackOUT);
 

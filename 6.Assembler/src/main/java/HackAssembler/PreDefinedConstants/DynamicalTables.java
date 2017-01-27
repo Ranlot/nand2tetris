@@ -1,4 +1,4 @@
-package PreDefinedConstants;
+package HackAssembler.PreDefinedConstants;
 
 public enum DynamicalTables {
     labelSymbols,

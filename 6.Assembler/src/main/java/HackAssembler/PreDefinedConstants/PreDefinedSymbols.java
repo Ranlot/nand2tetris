@@ -1,4 +1,4 @@
-package PreDefinedConstants;
+package HackAssembler.PreDefinedConstants;
 
 public final class PreDefinedSymbols {
 
@@ -8,8 +8,6 @@ public final class PreDefinedSymbols {
     public final static String byNothing = "";
     public final static String zeroBit = "0";
     public final static String shtrudelSymbol = "@";
-    public final static String addressInstruction = "addressInstruction";
-    public final static String computeInstruction = "computeInstruction";
     public final static long startOfFreeMemoryAddressSymbols = 16;
     public final static String jumpSeparator = ";";
     public final static String equalSeparator = "=";

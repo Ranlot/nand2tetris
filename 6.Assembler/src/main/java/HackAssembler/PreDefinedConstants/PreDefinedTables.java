@@ -1,4 +1,4 @@
-package PreDefinedConstants;
+package HackAssembler.PreDefinedConstants;
 
 import com.google.common.collect.ImmutableMap;
 

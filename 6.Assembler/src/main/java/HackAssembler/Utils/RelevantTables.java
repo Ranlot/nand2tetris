@@ -1,8 +1,8 @@
-package HackAssembler;
+package HackAssembler.Utils;
 
 import java.util.Map;
 
-//#TODO maje this a singleton
+//#TODO make this a singleton
 public class RelevantTables {
 
     private Map<String, String> labelTable;

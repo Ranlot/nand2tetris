@@ -1,39 +1,21 @@
 package HackAssembler.CPUinstructions;
 
-import HackAssembler.RelevantTables;
+import HackAssembler.Utils.ASMline;
+import HackAssembler.Utils.RelevantTables;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static PreDefinedConstants.PreDefinedSymbols.*;
+import static HackAssembler.PreDefinedConstants.PreDefinedSymbols.*;
 
 public class ComputeInstruction implements CPUinstruction {
 
-    private String instruction;
+    private ASMline instruction;
 
-    public ComputeInstruction(String instruction) {
+    public ComputeInstruction(ASMline instruction) {
         this.instruction = instruction;
-    }
-
-    private boolean isJumpInstruction(String instruction) {
-        return instruction.contains(jumpSeparator);
-    }
-
-    private List<String> instructionSplitter(String instruction, String splitCharacter) {
-
-        List<String> res = new ArrayList<>();
-
-        String[] splitJump = instruction.split(splitCharacter);
-        String lhs = splitJump[0];
-        String rhs = splitJump[1];
-
-        res.add(lhs);
-        res.add(rhs);
-
-        return res;
-
     }
 
     private String AMswitch(String instruction) {
@@ -51,13 +33,11 @@ public class ComputeInstruction implements CPUinstruction {
         Map<String, String> destinationTable = relevantTables.getDestinationTable();
         Map<String, String> jumpTable = relevantTables.getJumpTable();
 
-        //String opCodeValue = opCode(instruction) ? "1" : "0";
-
         List<String> subComponents = new ArrayList<>();
 
-        if(isJumpInstruction(instruction)) {
+        if(instruction.isJumpInstruction()) {
 
-            List<String> splitJump = instructionSplitter(instruction, jumpSeparator);
+            List<String> splitJump = instruction.instructionSplitter(jumpSeparator);
 
             String computation = splitJump.get(0);
 
@@ -72,7 +52,7 @@ public class ComputeInstruction implements CPUinstruction {
             return makeBinaryInstruction(subComponents);
         }
 
-        List<String> splitJump = instructionSplitter(instruction, equalSeparator);
+        List<String> splitJump = instruction.instructionSplitter(equalSeparator);
 
         String computation = splitJump.get(1);
 

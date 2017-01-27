@@ -1,6 +1,6 @@
 package HackAssembler.CPUinstructions;
 
-import HackAssembler.RelevantTables;
+import HackAssembler.Utils.RelevantTables;
 
 public interface CPUinstruction {
 
