@@ -1,12 +1,5 @@
 package HackAssembler.Utils;
 
-import HackAssembler.CPUinstructions.AddressInstruction;
-import HackAssembler.CPUinstructions.CPUinstruction;
-import HackAssembler.CPUinstructions.ComputeInstruction;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static HackAssembler.PreDefinedConstants.PreDefinedSymbols.*;
 
 public class ASMline {
@@ -21,16 +14,16 @@ public class ASMline {
         return string.contains("(") && string.contains(")");
     }
 
-    private static boolean isAddressInstruction(String string) {
+    boolean isLabelInstruction() {
+        return isLabelInstruction(ASMline);
+    }
+
+    static boolean isAddressInstruction(String string) {
         return string.startsWith(shtrudelSymbol);
     }
 
     boolean isAddressInstruction() {
         return isAddressInstruction(ASMline);
-    }
-
-    boolean isLabelInstruction() {
-        return isLabelInstruction(ASMline);
     }
 
     String removeParenthesis() {
@@ -39,6 +32,10 @@ public class ASMline {
 
     public String extractMemorySymbol() {
         return ASMline.split(shtrudelSymbol)[1];
+    }
+
+    public ASMlineCPU issueCPUinstruction() {
+        return new ASMlineCPU(ASMline);
     }
 
     public ASMline sanitizeString() {
@@ -55,32 +52,4 @@ public class ASMline {
         return ! isLabelInstruction(ASMline);
     }
 
-    public CPUinstruction makeCPUinstruction() {
-        return isAddressInstruction(ASMline) ?
-                new AddressInstruction(new ASMline(ASMline)) :
-                new ComputeInstruction(new ASMline(ASMline));
-    }
-
-    public boolean isJumpInstruction() {
-        return ASMline.contains(jumpSeparator);
-    }
-
-    public List<String> instructionSplitter(String splitCharacter) {
-
-        List<String> res = new ArrayList<>();
-
-        String[] splitJump = ASMline.split(splitCharacter);
-        String lhs = splitJump[0];
-        String rhs = splitJump[1];
-
-        res.add(lhs);
-        res.add(rhs);
-
-        return res;
-    }
-
-    @Override
-    public String toString() {
-        return ASMline;
-    }
 }

@@ -1,6 +1,6 @@
 package HackAssembler.CPUinstructions;
 
-import HackAssembler.Utils.ASMline;
+import HackAssembler.Utils.ASMlineCPU;
 import HackAssembler.Utils.RelevantTables;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,9 +11,9 @@ import static HackAssembler.PreDefinedConstants.PreDefinedSymbols.zeroBit;
 
 public class AddressInstruction implements CPUinstruction {
 
-    private ASMline instruction;
+    private ASMlineCPU instruction;
 
-    public AddressInstruction(ASMline instruction) {
+    public AddressInstruction(ASMlineCPU instruction) {
         this.instruction = instruction;
     }
 

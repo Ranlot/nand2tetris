@@ -2,6 +2,7 @@ package HackAssembler;
 
 import HackAssembler.Utils.ASMline;
 import HackAssembler.CPUinstructions.CPUinstruction;
+import HackAssembler.Utils.ASMlineCPU;
 import HackAssembler.Utils.RelevantTables;
 import HackAssembler.PreDefinedConstants.DynamicalTables;
 import org.jooq.lambda.Seq;
@@ -56,7 +57,8 @@ public class Main {
             //consume second copy of assembly code to handle CPU instructions (address & compute)
             Seq<CPUinstruction> cpuInstructions = duplicatedASMtext.v2
                     .filter(ASMline::isCPUinstruction)
-                    .map(ASMline::makeCPUinstruction);
+                    .map(ASMline::issueCPUinstruction)
+                    .map(ASMlineCPU::makeCPUinstruction);
 
             FileWriter fileOut = new FileWriter(hackOUT);
 

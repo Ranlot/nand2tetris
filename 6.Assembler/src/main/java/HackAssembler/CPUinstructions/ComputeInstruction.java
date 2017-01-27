@@ -1,6 +1,6 @@
 package HackAssembler.CPUinstructions;
 
-import HackAssembler.Utils.ASMline;
+import HackAssembler.Utils.ASMlineCPU;
 import HackAssembler.Utils.RelevantTables;
 
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import static HackAssembler.PreDefinedConstants.PreDefinedSymbols.*;
 
 public class ComputeInstruction implements CPUinstruction {
 
-    private ASMline instruction;
+    private ASMlineCPU instruction;
 
-    public ComputeInstruction(ASMline instruction) {
+    public ComputeInstruction(ASMlineCPU instruction) {
         this.instruction = instruction;
     }
 
