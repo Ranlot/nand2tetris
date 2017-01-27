@@ -4,6 +4,6 @@ import HackAssembler.RelevantTables;
 
 public interface CPUinstruction {
 
-    String decodeInstruction(RelevantTables relevantTables);
+    String decodeCPUInstruction(RelevantTables relevantTables);
 
 }

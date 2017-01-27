@@ -3,7 +3,7 @@ package HackAssembler;
 import HackAssembler.ASMtext.ASMtext;
 import HackAssembler.ASMtext.ASMtextCPU;
 import HackAssembler.CPUinstructions.CPUinstruction;
-import HackAssembler.CPUinstructions.CPUinstructionFactory;
+import PreDefinedConstants.DynamicalTables;
 import org.jooq.lambda.Seq;
 import org.jooq.lambda.tuple.Tuple2;
 
@@ -11,13 +11,13 @@ import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import static HackAssembler.Utils.Utils.createRelevantTables;
 import static HackAssembler.Utils.Utils.writeToFile;
 import static PreDefinedConstants.PreDefinedTables.*;
+import static PreDefinedConstants.DynamicalTables.*;
 import static org.jooq.lambda.Seq.seq;
 
 public class Main {
@@ -45,32 +45,24 @@ public class Main {
                     .filter(ASMtext::isNotEmpty)
                     .duplicate();
 
-            //go over the assembly code and create tables of symbols for labels and memory locations
-            List<Map<String, String>> relevantTables = createRelevantTables(duplicatedASMtext.v1);
+            // consume first copy of assembly code
+            // dynamically create tables of symbols for labels and memory locations
+            Map<DynamicalTables, Map<String, String>> dynamicalSymbolTables = createRelevantTables(duplicatedASMtext.v1);
+            Map<String, String> dynamicalLabelSymbols = dynamicalSymbolTables.get(labelSymbols);
+            memorySymbolsMap.putAll(dynamicalSymbolTables.get(DynamicalTables.memorySymbols));
+            RelevantTables relevantTables = new RelevantTables(
+                    dynamicalLabelSymbols, memorySymbolsMap, computeTableMap, jumpTableMap, destinationTableMap);
 
-            //TODO: get rid of explicit indices
-            Map<String, String> labelTableContent = relevantTables.get(0);
-            Map<String, String> programSpecificSymbols = relevantTables.get(1);
-            memorySymbolContent.putAll(programSpecificSymbols);
-
-            RelevantTables finalRelevantTables = new RelevantTables(labelTableContent,
-                    memorySymbolContent,
-                    computeTableContent,
-                    jumpTableContent,
-                    destinationTableContent);
-
-            CPUinstructionFactory cpuInstructionFactory = new CPUinstructionFactory();
-
+            //consume second copy of assembly code to handle CPU instructions (address & compute)
             Seq<CPUinstruction> cpuInstructions = duplicatedASMtext.v2
                     .filter(ASMtext::isCPUinstruction)
                     .map(ASMtext::issueCPUinstruction)
-                    .map(ASMtextCPU::parseCPUinstructionType)
-                    .map(cpuInstructionFactory::makeCPUinstruction);
+                    .map(ASMtextCPU::makeCPUinstruction);
 
             FileWriter fileOut = new FileWriter(hackOUT);
 
             cpuInstructions
-                    .map(cpuInstruction -> cpuInstruction.decodeInstruction(finalRelevantTables))
+                    .map(cpuInstruction -> cpuInstruction.decodeCPUInstruction(relevantTables))
                     .forEach(binaryInstruction -> writeToFile(fileOut, binaryInstruction));
 
             fileOut.close();

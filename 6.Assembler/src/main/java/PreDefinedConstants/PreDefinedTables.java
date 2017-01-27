@@ -7,7 +7,7 @@ import java.util.Map;
 
 abstract public class PreDefinedTables {
 
-    public static final ImmutableMap<String,String> jumpTableContent = ImmutableMap.<String, String>builder()
+    public static final ImmutableMap<String,String> jumpTableMap = ImmutableMap.<String, String>builder()
             .put("null", "000")
             .put("JGT", "001")
             .put("JEQ", "010")
@@ -18,7 +18,7 @@ abstract public class PreDefinedTables {
             .put("JMP", "111")
             .build();
 
-    public static final ImmutableMap<String, String> destinationTableContent = ImmutableMap.<String, String>builder()
+    public static final ImmutableMap<String, String> destinationTableMap = ImmutableMap.<String, String>builder()
             .put("null", "000")
             .put("M", "001")
             .put("D", "010")
@@ -29,7 +29,7 @@ abstract public class PreDefinedTables {
             .put("AMD", "111")
             .build();
 
-    public static Map<String, String> memorySymbolContent = new HashMap<String, String>() {{
+    public static Map<String, String> memorySymbolsMap = new HashMap<String, String>() {{
             put("SP", "0");
             put("LCL", "1");
             put("ARG", "2");
@@ -55,7 +55,7 @@ abstract public class PreDefinedTables {
             put("KBD", "24576");
     }};
 
-    public static final Map<String, String> computeTableContent = ImmutableMap.<String, String>builder()
+    public static final Map<String, String> computeTableMap = ImmutableMap.<String, String>builder()
             .put("0", "101010")
             .put("1", "111111")
             .put("-1", "111010")
@@ -110,13 +110,4 @@ abstract public class PreDefinedTables {
             .put("M|D","010101")  //same as M|D
 
 	        .build();
-
-    /*public static Map<SymbolTableNames, Map<String, String>> getPreDefinedMaps() {
-        Map<SymbolTableNames, Map<String, String>> mapOfPreDefinedMaps = new HashMap<>();
-        mapOfPreDefinedMaps.put(jumpTable, jumpTableContent);
-        mapOfPreDefinedMaps.put(destinationTable, destinationTableContent);
-        //mapOfPreDefinedMaps.put(computeTable, computeTableContent);
-        return mapOfPreDefinedMaps;
-    }*/
-
 }

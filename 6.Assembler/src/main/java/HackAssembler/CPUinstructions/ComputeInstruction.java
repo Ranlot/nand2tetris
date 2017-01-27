@@ -13,7 +13,7 @@ public class ComputeInstruction implements CPUinstruction {
 
     private String instruction;
 
-    ComputeInstruction(String instruction) {
+    public ComputeInstruction(String instruction) {
         this.instruction = instruction;
     }
 
@@ -45,7 +45,7 @@ public class ComputeInstruction implements CPUinstruction {
     }
 
     @Override
-    public String decodeInstruction(RelevantTables relevantTables) {
+    public String decodeCPUInstruction(RelevantTables relevantTables) {
 
         Map<String, String> computeTable = relevantTables.getComputeTable();
         Map<String, String> destinationTable = relevantTables.getDestinationTable();
